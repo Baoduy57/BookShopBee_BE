@@ -1,21 +1,21 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const routes = require("./routes");
+const bodyParser = require("body-parser");
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3003;
 
-app.get("/", (req, res) => {
-  res.send("Welcome to the API! hihihihi");
-});
+app.use(bodyParser.json());
+
+routes(app);
 
 console.log("process.env.MONGO_DB", process.env.MONGO_DB);
 
 mongoose
-  .connect(
-    `mongodb+srv://BaoDuy:${process.env.MONGO_DB}@dbbookshop.lklja.mongodb.net/?retryWrites=true&w=majority&appName=DBBookShop`
-  )
+  .connect(`${process.env.MONGO_DB}`)
   .then(() => {
     console.log("Connected to MongoDB success!");
   })
