@@ -1,1 +1,1 @@
-Tạo API cập nhật thông tin người dùng ở backend
+Tạo API xóa và lấy thông tin người dùng ở backend
