@@ -1,4 +1,5 @@
 const UserService = require("../services/UserService");
+const JwtService = require("../services/jwtService");
 
 // tao user
 const createUser = async (req, res) => {
@@ -110,6 +111,7 @@ const deleteUser = async (req, res) => {
   }
 };
 
+// lay tat ca user
 const getAllUser = async (req, res) => {
   try {
     const respone = await UserService.getAllUser();
@@ -141,6 +143,26 @@ const getDetailsUser = async (req, res) => {
   }
 };
 
+const refreshToken = async (req, res) => {
+  try {
+    const token = req.headers.token.split(" ")[1];
+
+    if (!token) {
+      return res.status(200).json({
+        status: "ERR",
+        message: "The token is not exist",
+      });
+    }
+
+    const respone = await JwtService.refreshTokenJwtService(token);
+    return res.status(200).json(respone);
+  } catch (e) {
+    return res.status(404).json({
+      message: e,
+    });
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
@@ -148,4 +170,5 @@ module.exports = {
   deleteUser,
   getAllUser,
   getDetailsUser,
+  refreshToken,
 };
