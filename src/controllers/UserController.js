@@ -1,5 +1,6 @@
 const UserService = require("../services/UserService");
 
+// tao user
 const createUser = async (req, res) => {
   try {
     const { name, email, password, confirmPassword, phone } = req.body;
@@ -31,6 +32,7 @@ const createUser = async (req, res) => {
   }
 };
 
+// dang nhap user
 const loginUser = async (req, res) => {
   try {
     const { name, email, password, confirmPassword, phone } = req.body;
@@ -62,6 +64,7 @@ const loginUser = async (req, res) => {
   }
 };
 
+//cap nhat user
 const updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -83,8 +86,66 @@ const updateUser = async (req, res) => {
   }
 };
 
+//xoa user
+const deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    // const token = req.headers;
+    // console.log("token", token);
+    // console.log("userId", userId);
+
+    if (!userId) {
+      return res.status(200).json({
+        status: "ERR",
+        message: "User ID is not exist",
+      });
+    }
+
+    const respone = await UserService.deleteUser(userId);
+    return res.status(200).json(respone);
+  } catch (e) {
+    return res.status(404).json({
+      message: e,
+    });
+  }
+};
+
+const getAllUser = async (req, res) => {
+  try {
+    const respone = await UserService.getAllUser();
+    return res.status(200).json(respone);
+  } catch (e) {
+    return res.status(404).json({
+      message: e,
+    });
+  }
+};
+
+const getDetailsUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    if (!userId) {
+      return res.status(200).json({
+        status: "ERR",
+        message: "User ID is not exist",
+      });
+    }
+
+    const respone = await UserService.getDetailsUser(userId);
+    return res.status(200).json(respone);
+  } catch (e) {
+    return res.status(404).json({
+      message: e,
+    });
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
   updateUser,
+  deleteUser,
+  getAllUser,
+  getDetailsUser,
 };
