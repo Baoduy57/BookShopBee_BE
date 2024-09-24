@@ -4,10 +4,10 @@ const JwtService = require("../services/jwtService");
 // tao user
 const createUser = async (req, res) => {
   try {
-    const { name, email, password, confirmPassword, phone } = req.body;
+    const { email, password, confirmPassword } = req.body;
     const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
     const isCheckEmail = reg.test(email);
-    if (!name || !email || !password || !confirmPassword || !phone) {
+    if (!email || !password || !confirmPassword) {
       return res.status(200).json({
         status: "ERR",
         message: "The input is requied",
@@ -36,10 +36,10 @@ const createUser = async (req, res) => {
 // dang nhap user
 const loginUser = async (req, res) => {
   try {
-    const { name, email, password, confirmPassword, phone } = req.body;
+    const { email, password } = req.body;
     const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
     const isCheckEmail = reg.test(email);
-    if (!name || !email || !password || !confirmPassword || !phone) {
+    if (!email || !password) {
       return res.status(200).json({
         status: "ERR",
         message: "The input is requied",
@@ -48,11 +48,6 @@ const loginUser = async (req, res) => {
       return res.status(200).json({
         status: "ERR",
         message: "The input is email",
-      });
-    } else if (password !== confirmPassword) {
-      return res.status(200).json({
-        status: "ERR",
-        message: "The password is equal to the confirmPassword",
       });
     }
 
