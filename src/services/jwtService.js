@@ -37,11 +37,10 @@ const refreshTokenJwtService = async (token) => {
         }
         console.log("user", user);
 
-        const { payload } = user;
         const access_token = await genneralAccessToken({
-          id: payload?.id,
+          id: user?.id,
           // email: payload.email,
-          isAdmin: payload?.isAdmin,
+          isAdmin: user?.isAdmin,
         });
 
         console.log("access token", access_token);
