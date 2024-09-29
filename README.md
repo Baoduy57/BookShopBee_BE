@@ -1,1 +1,1 @@
-Tạo API cập nhật thông tin người dùng ở backend
+Thực hiện chức năng logout
