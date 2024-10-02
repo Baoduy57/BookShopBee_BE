@@ -88,32 +88,98 @@ const loginUser = (userLogin) => {
 };
 
 // cap nhat user
+// const updateUser = (id, data) => {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       const checkUser = await User.findOne({
+//         _id: id,
+//       });
+
+//       if (checkUser === null) {
+//         resolve({
+//           status: "OK",
+//           message: "The userID does not exist",
+//         });
+//       }
+
+//       const updatedUser = await User.findByIdAndUpdate(id, data, { new: true });
+
+//       resolve({
+//         status: "OK",
+//         message: "Successfully",
+//         data: updatedUser,
+//       });
+//     } catch (e) {
+//       reject(e);
+//     }
+//   });
+// };
+
 const updateUser = (id, data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const checkUser = await User.findOne({
-        _id: id,
-      });
+      const checkUser = await User.findOne({ _id: id });
 
-      if (checkUser === null) {
+      if (!checkUser) {
+        // Trả về lỗi khi không tìm thấy user
         resolve({
-          status: "OK",
+          status: "ERR",
           message: "The userID does not exist",
         });
       }
 
+      // Cập nhật user
       const updatedUser = await User.findByIdAndUpdate(id, data, { new: true });
+
+      if (!updatedUser) {
+        resolve({
+          status: "ERR",
+          message: "Failed to update user",
+        });
+      }
 
       resolve({
         status: "OK",
-        message: "Successfully",
+        message: "Successfully updated user",
         data: updatedUser,
       });
     } catch (e) {
-      reject(e);
+      reject({
+        status: "ERR",
+        message: "Internal server error",
+        error: e.message,
+      });
     }
   });
 };
+
+// const updateUser = async (id, data) => {
+//   try {
+//     const checkUser = await User.findById(id); // Sử dụng findById để tìm người dùng
+
+//     if (!checkUser) {
+//       return {
+//         status: "NOT_FOUND",
+//         message: "The userID does not exist",
+//       };
+//     }
+
+//     const updatedUser = await User.findByIdAndUpdate(id, data, { new: true });
+
+//     return {
+//       status: "OK",
+//       message: "Successfully updated the user",
+//       data: updatedUser,
+//     };
+//   } catch (error) {
+//     console.error("Error updating user:", error); // Ghi lại lỗi
+//     throw {
+//       status: "ERROR",
+//       message: "Failed to update the user",
+//       error: error.message,
+//     };
+//   }
+// };
 
 // xoa user
 const deleteUser = (id) => {

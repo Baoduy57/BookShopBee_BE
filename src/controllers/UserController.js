@@ -69,23 +69,58 @@ const loginUser = async (req, res) => {
 };
 
 //cap nhat user
+// const updateUser = async (req, res) => {
+//   try {
+//     const userId = req.params.id;
+//     const data = req.body;
+//     if (!userId) {
+//       return res.status(200).json({
+//         status: "ERR",
+//         message: "User ID is not exist",
+//       });
+//     }
+//     // console.log("userId: ", userId);
+//     // console.log("data", data);
+//     const respone = await UserService.updateUser(userId, data);
+//     return res.status(200).json(respone);
+//   } catch (e) {
+//     return res.status(404).json({
+//       message: e,
+//     });
+//   }
+// };
+
 const updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
     const data = req.body;
+
     if (!userId) {
-      return res.status(200).json({
+      return res.status(400).json({
         status: "ERR",
-        message: "User ID is not exist",
+        message: "User ID is required",
       });
     }
-    // console.log("userId: ", userId);
-    // console.log("data", data);
-    const respone = await UserService.updateUser(userId, data);
-    return res.status(200).json(respone);
+
+    // Cập nhật user qua UserService
+    const response = await UserService.updateUser(userId, data);
+
+    if (response.status === "OK") {
+      return res.status(200).json(response); // Trả về kết quả cập nhật thành công
+    } else {
+      return res.status(400).json({
+        status: "ERR",
+        message: response.message || "Failed to update user",
+      });
+    }
   } catch (e) {
-    return res.status(404).json({
-      message: e,
+    // Log lỗi chi tiết
+    console.error("Update user error:", e);
+
+    return res.status(500).json({
+      status: "ERR",
+      message: "Internal Server Error",
+      error: e.message,
     });
   }
 };
@@ -167,17 +202,43 @@ const refreshToken = async (req, res) => {
   }
 };
 
+// const logoutUser = async (req, res) => {
+//   // console.log("req.cookies", req.cookies);
+//   try {
+//     res.clearCookie("refresh_token");
+//     return res.status(200).json({
+//       status: "OK",
+//       message: "Logout success",
+//     });
+//   } catch (e) {
+//     return res.status(404).json({
+//       message: e,
+//     });
+//   }
+// };
+
 const logoutUser = async (req, res) => {
-  // console.log("req.cookies", req.cookies);
   try {
-    res.clearCookie("refresh_token");
+    // Xóa cookie chứa refresh_token
+    res.clearCookie("refresh_token", {
+      httpOnly: true, // Đảm bảo cookie không thể truy cập từ JavaScript
+      secure: true, // Chỉ sử dụng cookie trên HTTPS (chỉ bật khi dùng HTTPS)
+      sameSite: "Strict", // Ngăn chặn gửi cookie tới các domain khác (nếu cần)
+    });
+
+    // Trả về phản hồi đăng xuất thành công
     return res.status(200).json({
       status: "OK",
-      message: "Logout success",
+      message: "Logout successful",
     });
   } catch (e) {
-    return res.status(404).json({
-      message: e,
+    console.error("Error during logout:", e);
+
+    // Trả về phản hồi lỗi
+    return res.status(500).json({
+      status: "ERROR",
+      message: "Logout failed",
+      error: e.toString(), // Bạn có thể log chi tiết lỗi
     });
   }
 };

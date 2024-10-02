@@ -23,6 +23,12 @@ const userSchema = new mongoose.Schema(
       type: Number,
       // required: true,
     },
+    address: {
+      type: String,
+    },
+    avatar: {
+      type: String,
+    },
     // access_token: {
     //   type: String,
     //   required: true,
