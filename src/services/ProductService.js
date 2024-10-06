@@ -1,22 +1,62 @@
 const Product = require("../models/ProductModel");
 
 // tao doi tuong moi
+// const createProduct = (newProduct) => {
+//   return new Promise(async (resolve, reject) => {
+//     const { name, image, type, price, countInStock, rating, description } =
+//       newProduct;
+
+//     try {
+//       const checkProduct = await Product.findOne({
+//         name: name,
+//       });
+//       if (checkProduct !== null) {
+//         resolve({
+//           status: "OK",
+//           message: "The name of product is exist",
+//         });
+//       }
+
+//       const createdProduct = await Product.create({
+//         name,
+//         image,
+//         type,
+//         price,
+//         countInStock,
+//         rating,
+//         description,
+//       });
+//       if (createdProduct) {
+//         resolve({
+//           status: "OK",
+//           message: "Create Product SUCCESS",
+//           data: createdProduct,
+//         });
+//       }
+//     } catch (e) {
+//       reject(e);
+//     }
+//   });
+// };
+
 const createProduct = (newProduct) => {
   return new Promise(async (resolve, reject) => {
     const { name, image, type, price, countInStock, rating, description } =
       newProduct;
 
     try {
-      const checkProduct = await Product.findOne({
-        name: name,
-      });
-      if (checkProduct !== null) {
-        resolve({
-          status: "OK",
-          message: "The name of product is exist",
+      // Kiểm tra xem sản phẩm có tồn tại không
+      const checkProduct = await Product.findOne({ name });
+
+      if (checkProduct) {
+        // Nếu sản phẩm đã tồn tại, trả về thông báo lỗi
+        return resolve({
+          status: "ERR",
+          message: "The name of the product already exists",
         });
       }
 
+      // Tạo mới sản phẩm
       const createdProduct = await Product.create({
         name,
         image,
@@ -26,15 +66,27 @@ const createProduct = (newProduct) => {
         rating,
         description,
       });
+
       if (createdProduct) {
-        resolve({
+        // Trả về sản phẩm được tạo thành công
+        return resolve({
           status: "OK",
-          message: "Create Product SUCCESS",
+          message: "Product created successfully",
           data: createdProduct,
+        });
+      } else {
+        // Trường hợp tạo sản phẩm thất bại
+        return reject({
+          status: "ERR",
+          message: "Failed to create product",
         });
       }
     } catch (e) {
-      reject(e);
+      // Xử lý ngoại lệ khi thực hiện query
+      return reject({
+        status: "ERR",
+        message: e.message || "Internal server error",
+      });
     }
   });
 };
