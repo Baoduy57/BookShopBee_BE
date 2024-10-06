@@ -1,23 +1,64 @@
 const ProductService = require("../services/ProductService");
 
 // tao product
+// const createProduct = async (req, res) => {
+//   try {
+//     const { name, image, type, price, countInStock, rating, description } =
+//       req.body;
+
+//     if (
+//       !name ||
+//       !image ||
+//       !type ||
+//       !price ||
+//       !countInStock ||
+//       !rating ||
+//       !description
+//     ) {
+//       return res.status(400).json({
+//         status: "ERR",
+//         message: "The input is requied",
+//       });
+//     }
+
+//     const respone = await ProductService.createProduct(req.body);
+//     return res.status(200).json(respone);
+//   } catch (e) {
+//     return res.status(404).json({
+//       message: e,
+//     });
+//   }
+// };
+
 const createProduct = async (req, res) => {
   try {
     const { name, image, type, price, countInStock, rating, description } =
       req.body;
 
-    if (!name || !image || !type || !price || !countInStock || !rating) {
-      return res.status(200).json({
+    if (
+      !name ||
+      !image ||
+      !type ||
+      !price ||
+      !countInStock ||
+      !rating ||
+      !description
+    ) {
+      return res.status(400).json({
         status: "ERR",
-        message: "The input is requied",
+        message: "The input is required",
       });
     }
 
-    const respone = await ProductService.createProduct(req.body);
-    return res.status(200).json(respone);
+    // Gọi service để tạo sản phẩm
+    const response = await ProductService.createProduct(req.body);
+
+    return res.status(200).json(response);
   } catch (e) {
-    return res.status(404).json({
-      message: e,
+    // Xử lý ngoại lệ từ service
+    return res.status(500).json({
+      status: "ERR",
+      message: "Server error: " + e.message,
     });
   }
 };
@@ -90,7 +131,7 @@ const getAllProduct = async (req, res) => {
   try {
     const { limit, page, sort, filter } = req.query;
     const respone = await ProductService.getAllProduct(
-      Number(limit) || 8,
+      Number(limit) || 15,
       Number(page) || 0,
       sort,
       filter
