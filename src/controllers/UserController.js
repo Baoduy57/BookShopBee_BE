@@ -161,22 +161,50 @@ const getAllUser = async (req, res) => {
   }
 };
 
+// const getDetailsUser = async (req, res) => {
+//   try {
+//     const userId = req.params.id;
+
+//     if (!userId) {
+//       return res.status(400).json({
+//         status: "ERR",
+//         message: "User ID is not exist",
+//       });
+//     }
+
+//     const respone = await UserService.getDetailsUser(userId);
+//     return res.status(200).json(respone);
+//   } catch (e) {
+//     return res.status(404).json({
+//       message: e,
+//     });
+//   }
+// };
+
 const getDetailsUser = async (req, res) => {
   try {
     const userId = req.params.id;
 
     if (!userId) {
-      return res.status(200).json({
+      return res.status(400).json({
         status: "ERR",
-        message: "User ID is not exist",
+        message: "User ID is not provided",
       });
     }
 
-    const respone = await UserService.getDetailsUser(userId);
-    return res.status(200).json(respone);
+    const response = await UserService.getDetailsUser(userId);
+
+    if (response.status === "OK" && response.data) {
+      return res.status(200).json(response);
+    } else {
+      return res.status(404).json({
+        status: "ERR",
+        message: response.message || "User not found",
+      });
+    }
   } catch (e) {
-    return res.status(404).json({
-      message: e,
+    return res.status(500).json({
+      message: "An error occurred: " + e.message,
     });
   }
 };
