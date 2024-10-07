@@ -65,12 +65,12 @@ const loginUser = (userLogin) => {
       }
 
       const access_token = await genneralAccessToken({
-        id: checkUser.id,
+        id: checkUser._id,
         email: checkUser.email,
         isAdmin: checkUser.isAdmin,
       });
       const refresh_token = await genneralRefreshToken({
-        id: checkUser.id,
+        id: checkUser._id,
         email: checkUser.email,
         isAdmin: checkUser.isAdmin,
       });
@@ -185,7 +185,7 @@ const updateUser = (id, data) => {
 const deleteUser = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const checkUser = await User.findOne({
+      const checkUser = await User.findById({
         _id: id,
       });
 
@@ -208,19 +208,38 @@ const deleteUser = (id) => {
   });
 };
 
-const getAllUser = () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const allUser = await User.find();
-      resolve({
-        status: "OK",
-        message: "All user Successfully",
-        data: allUser,
-      });
-    } catch (e) {
-      reject(e);
-    }
-  });
+// const getAllUser = () => {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       const allUser = await User.find();
+//       resolve({
+//         status: "OK",
+//         message: "All user Successfully",
+//         data: allUser,
+//       });
+//     } catch (e) {
+//       reject(e);
+//     }
+//   });
+// };
+
+// Hàm lấy tất cả người dùng
+const getAllUser = async () => {
+  try {
+    const allUser = await User.find();
+    return {
+      status: "OK",
+      message: "All users fetched successfully",
+      data: allUser,
+    };
+  } catch (e) {
+    // Bắt lỗi và trả về thông báo lỗi
+    return {
+      status: "ERROR",
+      message: "Error fetching all users",
+      error: e,
+    };
+  }
 };
 
 const getDetailsUser = (id) => {

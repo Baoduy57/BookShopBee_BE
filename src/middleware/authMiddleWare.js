@@ -34,7 +34,7 @@ const authMiddleWare = (req, res, next) => {
       status: "ERROR",
     });
   }
-
+  console.log("Received token:", authHeader);
   const token = authHeader.split(" ")[1]; // Lấy token sau "Bearer"
 
   // Xác thực token
