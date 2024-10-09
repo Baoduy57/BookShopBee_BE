@@ -20,12 +20,15 @@ app.use(
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb" }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 routes(app);
 
 mongoose
-  .connect(`${process.env.MONGO_DB}`)
+  .connect(process.env.MONGO_DB, {
+    serverSelectionTimeoutMS: 5000, // Thời gian chờ kết nối là 5 giây
+  })
   .then(() => {
     console.log("Connected to MongoDB success!");
   })

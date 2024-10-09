@@ -129,10 +129,6 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
-    // const token = req.headers;
-    // console.log("token", token);
-    // console.log("userId", userId);
-
     if (!userId) {
       return res.status(200).json({
         status: "ERR",
@@ -141,6 +137,25 @@ const deleteUser = async (req, res) => {
     }
 
     const respone = await UserService.deleteUser(userId);
+    return res.status(200).json(respone);
+  } catch (e) {
+    return res.status(404).json({
+      message: e,
+    });
+  }
+};
+
+const deleteManyUser = async (req, res) => {
+  try {
+    const ids = req.body.ids;
+    if (!ids) {
+      return res.status(200).json({
+        status: "ERR",
+        message: "User IDs is not exist",
+      });
+    }
+
+    const respone = await UserService.deleteManyUser(ids);
     return res.status(200).json(respone);
   } catch (e) {
     return res.status(404).json({
@@ -280,4 +295,5 @@ module.exports = {
   getDetailsUser,
   refreshToken,
   logoutUser,
+  deleteManyUser,
 };
