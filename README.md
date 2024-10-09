@@ -1,1 +1,1 @@
-Tạo API cập nhật thông tin người dùng ở backend
+Xử lý tính năng delete many và update bên user
