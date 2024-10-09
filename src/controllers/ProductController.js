@@ -107,9 +107,6 @@ const getDetailProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const productId = req.params.id;
-    // const token = req.headers;
-    // console.log("token", token);
-    // console.log("userId", userId);
 
     if (!productId) {
       return res.status(200).json({
@@ -119,6 +116,26 @@ const deleteProduct = async (req, res) => {
     }
 
     const respone = await ProductService.deleteProduct(productId);
+    return res.status(200).json(respone);
+  } catch (e) {
+    return res.status(404).json({
+      message: e,
+    });
+  }
+};
+
+const deleteManyProduct = async (req, res) => {
+  try {
+    const ids = req.body.ids;
+
+    if (!ids) {
+      return res.status(200).json({
+        status: "ERR",
+        message: "product Ids is not exist",
+      });
+    }
+
+    const respone = await ProductService.deleteManyProduct(ids);
     return res.status(200).json(respone);
   } catch (e) {
     return res.status(404).json({
@@ -149,4 +166,5 @@ module.exports = {
   getDetailProduct,
   deleteProduct,
   getAllProduct,
+  deleteManyProduct,
 };
