@@ -1,34 +1,6 @@
 const ProductService = require("../services/ProductService");
 
 // tao product
-// const createProduct = async (req, res) => {
-//   try {
-//     const { name, image, type, price, countInStock, rating, description } =
-//       req.body;
-
-//     if (
-//       !name ||
-//       !image ||
-//       !type ||
-//       !price ||
-//       !countInStock ||
-//       !rating ||
-//       !description
-//     ) {
-//       return res.status(400).json({
-//         status: "ERR",
-//         message: "The input is requied",
-//       });
-//     }
-
-//     const respone = await ProductService.createProduct(req.body);
-//     return res.status(200).json(respone);
-//   } catch (e) {
-//     return res.status(404).json({
-//       message: e,
-//     });
-//   }
-// };
 
 const createProduct = async (req, res) => {
   try {
@@ -160,6 +132,17 @@ const getAllProduct = async (req, res) => {
     });
   }
 };
+
+const getAllType = async (req, res) => {
+  try {
+    const respone = await ProductService.getAllType();
+    return res.status(200).json(respone);
+  } catch (e) {
+    return res.status(404).json({
+      message: e,
+    });
+  }
+};
 module.exports = {
   createProduct,
   updateProduct,
@@ -167,4 +150,5 @@ module.exports = {
   deleteProduct,
   getAllProduct,
   deleteManyProduct,
+  getAllType,
 };
