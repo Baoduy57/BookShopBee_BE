@@ -178,7 +178,7 @@ const deleteManyProduct = (ids) => {
 
       resolve({
         status: "OK",
-        message: "Delete products Successfully",
+        message: "Delete many products Successfully",
       });
     } catch (e) {
       reject(e);
@@ -248,6 +248,22 @@ const getAllProduct = (limit, page, sort, filter) => {
   });
 };
 
+const getAllType = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const allType = await Product.distinct("type");
+
+      resolve({
+        status: "OK",
+        message: "All type product Successfully",
+        data: allType,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   createProduct,
   updateProduct,
@@ -255,4 +271,5 @@ module.exports = {
   deleteProduct,
   getAllProduct,
   deleteManyProduct,
+  getAllType,
 };
