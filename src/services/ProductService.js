@@ -41,8 +41,16 @@ const Product = require("../models/ProductModel");
 
 const createProduct = (newProduct) => {
   return new Promise(async (resolve, reject) => {
-    const { name, image, type, price, countInStock, rating, description } =
-      newProduct;
+    const {
+      name,
+      image,
+      type,
+      price,
+      countInStock,
+      rating,
+      description,
+      discount,
+    } = newProduct;
 
     try {
       // Kiểm tra xem sản phẩm có tồn tại không
@@ -65,6 +73,7 @@ const createProduct = (newProduct) => {
         countInStock,
         rating,
         description,
+        discount,
       });
 
       if (createdProduct) {
@@ -188,11 +197,10 @@ const deleteManyProduct = (ids) => {
 };
 
 const getAllProduct = (limit, page, sort, filter) => {
-  console.log("sort", sort);
-  // console.log("page", typeof page);
   return new Promise(async (resolve, reject) => {
     try {
       const totalProduct = await Product.countDocuments();
+      let allProduct = [];
       if (filter) {
         const label = filter[0];
         const allObjectFilter = await Product.find({
@@ -231,9 +239,13 @@ const getAllProduct = (limit, page, sort, filter) => {
         });
       }
 
-      const allProduct = await Product.find()
-        .limit(limit)
-        .skip(page * limit);
+      if (!limit) {
+        allProduct = await Product.find();
+      } else {
+        allProduct = await Product.find()
+          .limit(limit)
+          .skip(page * limit);
+      }
 
       resolve({
         status: "OK",
