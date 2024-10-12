@@ -131,6 +131,7 @@ const getDetailProduct = (id) => {
         resolve({
           status: "OK",
           message: "The productID does not exist",
+          data: null, // Đảm bảo data là null
         });
       }
 
