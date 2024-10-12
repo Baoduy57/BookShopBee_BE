@@ -61,16 +61,24 @@ const getDetailProduct = async (req, res) => {
     const productId = req.params.id;
 
     if (!productId) {
-      return res.status(200).json({
+      return res.status(400).json({
         status: "ERR",
         message: "product Id is not exist",
       });
     }
 
     const respone = await ProductService.getDetailProduct(productId);
+    // Kiểm tra nếu sản phẩm không tồn tại
+    if (respone.data === null) {
+      return res.status(404).json({
+        status: "ERR",
+        message: "The productID does not exist",
+      });
+    }
+
     return res.status(200).json(respone);
   } catch (e) {
-    return res.status(404).json({
+    return res.status(500).json({
       message: e,
     });
   }
