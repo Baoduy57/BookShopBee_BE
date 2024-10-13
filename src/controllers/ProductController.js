@@ -54,8 +54,7 @@ const updateProduct = async (req, res) => {
         message: "Product ID is not exist",
       });
     }
-    // console.log("userId: ", userId);
-    // console.log("data", data);
+
     const respone = await ProductService.updateProduct(productId, data);
     return res.status(200).json(respone);
   } catch (e) {

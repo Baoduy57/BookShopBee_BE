@@ -28,7 +28,7 @@ const orderSchema = new mongoose.Schema(
       },
     ],
     shippingAddress: {
-      fullname: {
+      fullName: {
         type: String,
         required: true,
       },
@@ -55,10 +55,6 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
     shippingPrice: {
-      type: Number,
-      required: true,
-    },
-    taxPrice: {
       type: Number,
       required: true,
     },
