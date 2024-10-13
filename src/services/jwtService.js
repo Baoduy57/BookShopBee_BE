@@ -59,8 +59,6 @@ const genneralRefreshToken = async (payload) => {
 const refreshTokenJwtService = async (token) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log("token", token);
-
       // Kiểm tra token có tồn tại không
       if (!token) {
         return resolve({
@@ -85,16 +83,12 @@ const refreshTokenJwtService = async (token) => {
         }
         // Tiếp tục tạo access token mới nếu không có lỗi
 
-        console.log("user", user);
-
         // Tạo access token mới
         try {
           const access_token = await genneralAccessToken({
             id: user?.id,
             isAdmin: user?.isAdmin,
           });
-
-          console.log("access token", access_token);
 
           resolve({
             status: "OK",
