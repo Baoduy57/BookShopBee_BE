@@ -82,7 +82,7 @@ const authMiddleWare = (req, res, next) => {
 // };
 
 const authUserMiddleWare = (req, res, next) => {
-  const authHeader = req.headers.token;
+  const authHeader = req.headers.token; // Lấy token từ headers
   if (!authHeader) {
     return res.status(401).json({
       message: "No token provided",
@@ -90,7 +90,7 @@ const authUserMiddleWare = (req, res, next) => {
     });
   }
 
-  const token = authHeader.split(" ")[1]; // 'Bearer <token>'
+  const token = authHeader.split(" ")[1]; // Tách 'Bearer <token>'
   if (!token) {
     return res.status(401).json({
       message: "Invalid token format",
@@ -98,7 +98,7 @@ const authUserMiddleWare = (req, res, next) => {
     });
   }
 
-  const userId = req.params.id;
+  const userId = req.params.id; // Lấy userId từ params
 
   jwt.verify(token, process.env.ACCESS_TOKEN, function (err, user) {
     if (err) {
@@ -108,9 +108,9 @@ const authUserMiddleWare = (req, res, next) => {
       });
     }
 
-    // Kiểm tra xem người dùng có quyền admin hoặc truy cập đúng ID không
+    // Kiểm tra quyền admin hoặc user.id có khớp với userId trong params không
     if (user?.isAdmin || user?.id === userId) {
-      next();
+      next(); // Nếu đúng thì cho phép tiếp tục
     } else {
       return res.status(403).json({
         message: "Permission denied",

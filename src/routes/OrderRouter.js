@@ -4,5 +4,20 @@ const OrderController = require("../controllers/OrderController");
 const { authUserMiddleWare } = require("../middleware/authMiddleWare");
 
 router.post("/Create-Order", authUserMiddleWare, OrderController.createOrder);
+router.get(
+  "/Get-All-Order/:id",
+  authUserMiddleWare,
+  OrderController.getAllOrderDetails
+);
+router.get(
+  "/Get-Details-Order/:id",
+  authUserMiddleWare,
+  OrderController.getDetailsOrder
+);
+router.delete(
+  "/Cancel-Order/:id",
+  authUserMiddleWare,
+  OrderController.cancelDetailsOrder
+);
 
 module.exports = router;

@@ -54,9 +54,9 @@ const createProduct = (newProduct) => {
 
     try {
       // Kiểm tra xem sản phẩm có tồn tại không
-      const checkProduct = await Product.findOne({ name });
+      const checkProduct = await Product.findOne({ name: name });
 
-      if (checkProduct) {
+      if (checkProduct !== null) {
         // Nếu sản phẩm đã tồn tại, trả về thông báo lỗi
         return resolve({
           status: "ERR",
@@ -70,10 +70,10 @@ const createProduct = (newProduct) => {
         image,
         type,
         price,
-        countInStock,
+        countInStock: Number(countInStock),
         rating,
         description,
-        discount,
+        discount: Number(discount),
       });
 
       if (createdProduct) {
