@@ -1,1 +1,1 @@
-Tạo API cập nhật thông tin người dùng ở backend
+Hoàn thành phần mua hàng (còn lỗi phần shippingPrice và phần hủy đơn hàng)
