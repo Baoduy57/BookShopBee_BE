@@ -20,6 +20,9 @@ const orderSchema = new mongoose.Schema(
           type: Number,
           required: true,
         },
+        discount: {
+          type: Number,
+        },
         product: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
