@@ -30,7 +30,10 @@ const createOrder = async (req, res) => {
     }
 
     // Gọi service để tạo sản phẩm
-    const response = await OrderService.createOrder(req.body);
+    const response = await OrderService.createOrder({
+      ...req.body,
+      user: req.user.id,
+    });
 
     return res.status(200).json(response);
   } catch (e) {

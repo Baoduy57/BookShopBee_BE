@@ -201,7 +201,7 @@ const getDetailsOrder = (id) => {
 
       resolve({
         status: "OK",
-        message: "Details Product Successfully",
+        message: "Details Order Successfully",
         data: order,
       });
     } catch (e) {

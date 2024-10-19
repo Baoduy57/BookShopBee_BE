@@ -98,7 +98,7 @@ const authUserMiddleWare = (req, res, next) => {
     });
   }
 
-  const userId = req.params.id; // Lấy userId từ params
+  // const userId = req.params.id; // Lấy userId từ params
 
   jwt.verify(token, process.env.ACCESS_TOKEN, function (err, user) {
     if (err) {
@@ -109,7 +109,8 @@ const authUserMiddleWare = (req, res, next) => {
     }
 
     // Kiểm tra quyền admin hoặc user.id có khớp với userId trong params không
-    if (user?.isAdmin || user?.id === userId) {
+    if (user?.isAdmin || user?.id) {
+      req.user = user; // Lưu thông tin user vào req để sử dụng sau này
       next(); // Nếu đúng thì cho phép tiếp tục
     } else {
       return res.status(403).json({
