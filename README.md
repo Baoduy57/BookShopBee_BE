@@ -1,1 +1,1 @@
-Tạo API cập nhật thông tin người dùng ở backend
+Tích hơp nodemailer để gửi mail sau khi đặt hàng
