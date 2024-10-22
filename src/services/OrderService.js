@@ -1,6 +1,6 @@
 const Order = require("../models/OrderModel");
 const Product = require("../models/ProductModel");
-
+const EmailService = require("../services/EmailService.js");
 // tao doi tuong moi
 // const createOrder = (newOrder) => {
 //   return new Promise(async (resolve, reject) => {
@@ -90,7 +90,10 @@ const createOrder = (newOrder) => {
       address,
       city,
       phone,
+      isPaid,
+      paidAt,
       user,
+      email,
     } = newOrder;
 
     try {
@@ -145,10 +148,13 @@ const createOrder = (newOrder) => {
         itemsPrice,
         shippingPrice,
         totalPrice,
+        isPaid,
+        paidAt,
         user: user,
       });
 
       if (createdOrder) {
+        await EmailService.sendEmailCreateOrder(email, orderItems);
         resolve({
           status: "OK",
           message: "Create order successfully",
@@ -238,7 +244,7 @@ const cancelDetailsOrder = (id, data) => {
           }
         } else {
           return {
-            status: "OK",
+            status: "ERR",
             message: "ERR",
             id: order.product,
           };
@@ -249,7 +255,9 @@ const cancelDetailsOrder = (id, data) => {
       if (newData.length) {
         resolve({
           status: "ERR",
-          message: `San pham voi id${newData.join(", ")} khong ton tai`,
+          message: `Các sản phẩm sau gặp vấn đề: ${newData
+            .map((item) => item.id || item.product)
+            .join(", ")}`,
         });
       }
       resolve({
