@@ -26,7 +26,7 @@ const sendEmailCreateOrder = async (email, orderItems) => {
   // send mail with defined transport object
   let info = await transporter.sendMail({
     from: process.env.MAIL_ACCOUNT, // địa chỉ người gửi
-    to: process.env.MAIL_ACCOUNT, // danh sách người nhận
+    to: `${email},"sb-qoetj33464407@personal.example.com"`, // danh sách người nhận
     subject: "Hello bạn đã đặt hàng tại BookShopBee ✔", //Tiêu đề email
     text: "Bạn đã đặt hàng thành công tại BookShopBee", // nội dung dạng văn bản
     html: `<div><b>Bạn đã đặt hàng thành công tại BookShopBee</b></div>${listItem}`, // html body
