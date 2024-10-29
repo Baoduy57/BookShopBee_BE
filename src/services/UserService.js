@@ -1,5 +1,5 @@
 const User = require("../models/UserModel");
-const bcrypt = require("bcrypt");
+const bcryptjs = require("bcryptjs");
 const { genneralAccessToken, genneralRefreshToken } = require("./jwtService");
 
 // tao doi tuong moi
@@ -17,7 +17,7 @@ const createUser = (newUser) => {
         });
       }
 
-      const hash = bcrypt.hashSync(password, 10);
+      const hash = bcryptjs.hashSync(password, 10);
 
       const createdUser = await User.create({
         name,
@@ -55,7 +55,10 @@ const loginUser = (userLogin) => {
         });
       }
 
-      const comparePassword = bcrypt.compareSync(password, checkUser.password);
+      const comparePassword = bcryptjs.compareSync(
+        password,
+        checkUser.password
+      );
 
       if (!comparePassword) {
         resolve({
