@@ -216,57 +216,105 @@ const getDetailsOrder = (id) => {
   });
 };
 
+// const cancelDetailsOrder = (id, data) => {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       let order = [];
+//       const promises = data.map(async (order) => {
+//         const productData = await Product.findOneAndUpdate(
+//           {
+//             _id: order.product,
+//             selled: { $gte: order.amount },
+//           },
+//           {
+//             $inc: {
+//               countInStock: +order.amount,
+//               selled: -order.amount,
+//             },
+//           },
+//           { new: true }
+//         );
+//         if (productData) {
+//           order = await Order.findByIdAndDelete(id);
+//           if (order === null) {
+//             resolve({
+//               status: "ERR",
+//               message: "The order does not exist",
+//             });
+//           }
+//         } else {
+//           return {
+//             status: "ERR",
+//             message: "ERR",
+//             id: order.product,
+//           };
+//         }
+//       });
+//       const results = await Promise.all(promises);
+//       const newData = results && results.filter((item) => item.id);
+//       if (newData.length) {
+//         resolve({
+//           status: "ERR",
+//           message: `Các sản phẩm sau gặp vấn đề: ${newData
+//             .map((item) => item.id || item.product)
+//             .join(", ")}`,
+//         });
+//       }
+//       resolve({
+//         status: "SUCCESS",
+//         message: "Order cancel successful",
+//         data: order,
+//       });
+//     } catch (e) {
+//       reject(e);
+//     }
+//   });
+// };
+
 const cancelDetailsOrder = (id, data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let order = [];
-      const promises = data.map(async (order) => {
-        const productData = await Product.findOneAndUpdate(
-          {
-            _id: order.product,
-            selled: { $gte: order.amount },
-          },
-          {
-            $inc: {
-              countInStock: +order.amount,
-              selled: -order.amount,
-            },
-          },
+      let orderDeleted = await Order.findByIdAndDelete(id);
+      if (!orderDeleted) {
+        return resolve({ status: "ERR", message: "Order does not exist" });
+      }
+
+      // Đảm bảo việc cập nhật tất cả sản phẩm trong `orderItems`
+      const productUpdates = data.map(async (item) => {
+        const product = await Product.findOneAndUpdate(
+          { _id: item.product, selled: { $gte: item.amount } },
+          { $inc: { countInStock: item.amount, selled: -item.amount } },
           { new: true }
         );
-        if (productData) {
-          order = await Order.findByIdAndDelete(id);
-          if (order === null) {
-            resolve({
-              status: "ERR",
-              message: "The order does not exist",
-            });
-          }
-        } else {
+        if (!product) {
           return {
             status: "ERR",
-            message: "ERR",
-            id: order.product,
+            message: "Error with product",
+            id: item.product,
           };
         }
+        return null;
       });
-      const results = await Promise.all(promises);
-      const newData = results && results.filter((item) => item.id);
-      if (newData.length) {
-        resolve({
+
+      const results = await Promise.all(productUpdates);
+      const failedProducts = results.filter((res) => res !== null);
+
+      if (failedProducts.length) {
+        return resolve({
           status: "ERR",
-          message: `Các sản phẩm sau gặp vấn đề: ${newData
-            .map((item) => item.id || item.product)
+          message: `Issues with products: ${failedProducts
+            .map((p) => p.id)
             .join(", ")}`,
         });
       }
+
       resolve({
         status: "SUCCESS",
-        message: "Order cancel successful",
-        data: order,
+        message: "Order canceled successfully",
+        data: orderDeleted,
       });
-    } catch (e) {
-      reject(e);
+    } catch (error) {
+      reject(error);
     }
   });
 };

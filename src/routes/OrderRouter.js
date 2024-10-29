@@ -15,11 +15,7 @@ router.get(
   authUserMiddleWare,
   OrderController.getDetailsOrder
 );
-router.delete(
-  "/Cancel-Order/:id",
-  authUserMiddleWare,
-  OrderController.cancelDetailsOrder
-);
+router.delete("/Cancel-Order/:id", OrderController.cancelDetailsOrder);
 router.get("/Get-AllOrder", authMiddleWare, OrderController.getAllOrder);
 
 module.exports = router;
