@@ -12,7 +12,7 @@ const port = process.env.PORT || 3003;
 
 app.use(
   cors({
-    origin: "https://book-shop-bee.vercel.app/", // Thay đổi thành địa chỉ client của bạn
+    origin: "*", // Thay đổi thành địa chỉ client của bạn
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // Cho phép gửi cookie
   })
