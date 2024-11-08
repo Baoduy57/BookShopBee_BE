@@ -13,21 +13,21 @@ const createOrder = async (req, res) => {
       phone,
     } = req.body;
 
-    // if (
-    //   !paymentMethod ||
-    //   !itemsPrice ||
-    //   !shippingPrice ||
-    //   !totalPrice ||
-    //   !fullName ||
-    //   !address ||
-    //   !city ||
-    //   !phone
-    // ) {
-    //   return res.status(400).json({
-    //     status: "ERR",
-    //     message: "The input is required",
-    //   });
-    // }
+    if (
+      !paymentMethod ||
+      !itemsPrice ||
+      // !shippingPrice ||
+      !totalPrice ||
+      !fullName ||
+      !address ||
+      !city ||
+      !phone
+    ) {
+      return res.status(400).json({
+        status: "ERR",
+        message: "The input is required",
+      });
+    }
 
     // Gọi service để tạo sản phẩm
     const response = await OrderService.createOrder({
